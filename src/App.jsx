@@ -10,6 +10,8 @@ import Contact from './components/Contact';
 import Footer from './components/Footer'; 
 import ParticlesBackground from './components/ParticlesBackground';
 import BackToTop from './components/BackToTop';
+import ResumeButton from './components/ResumeButton'; 
+
 const App = () => {
   
   useEffect(() => {
@@ -43,6 +45,7 @@ const App = () => {
       
       <main>
         <Hero />
+        <ResumeButton />
         <About />
         <Skills />
         <Projects />
