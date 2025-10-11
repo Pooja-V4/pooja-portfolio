@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import ParticlesBackground from './components/ParticlesBackground';
 import BackToTop from './components/BackToTop';
 import ResumeButton from './components/ResumeButton'; 
+import Experience from './components/Experience';
 
 const App = () => {
   
@@ -49,6 +50,7 @@ const App = () => {
         <About />
         <Skills />
         <Projects />
+        <Experience/>
         <Contact />
       </main>
 
