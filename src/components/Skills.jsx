@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import '../assets/styles/Skills.css';
 
 // SVG Icons for Kotlin and Jetpack Compose
 const KotlinIcon = () => (
@@ -21,6 +22,31 @@ const ComposeIcon = () => (
   </svg>
 );
 
+// SVG Icons for new skills
+const SpringBootIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#6DB33F"/>
+    <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z" fill="white" fillOpacity="0.8"/>
+    <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" fill="#6DB33F"/>
+  </svg>
+);
+
+const PostgreIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#336791"/>
+    <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z" fill="white" fillOpacity="0.9"/>
+    <text x="12" y="16" textAnchor="middle" fill="#336791" fontSize="8" fontWeight="bold">SQL</text>
+  </svg>
+);
+
+const PostmanIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#FF6C37"/>
+    <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z" fill="white" fillOpacity="0.8"/>
+    <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" fill="#FF6C37"/>
+  </svg>
+);
+
 const skillsData = [
   { name: 'HTML5', iconClass: 'fab fa-html5 html-icon' },
   { name: 'CSS3', iconClass: 'fab fa-css3-alt css-icon' },
@@ -35,6 +61,9 @@ const skillsData = [
   { name: 'React', iconClass: 'fab fa-react react-icon' },
   { name: 'Kotlin', customIcon: <KotlinIcon /> },
   { name: 'Jetpack Compose', customIcon: <ComposeIcon /> },
+  { name: 'Spring Boot', customIcon: <SpringBootIcon /> },
+  { name: 'PostgreSQL', customIcon: <PostgreIcon /> },
+  { name: 'Postman', customIcon: <PostmanIcon /> },
 ];
 
 const Skills = () => {
@@ -67,13 +96,18 @@ const Skills = () => {
   }, []);
 
   return (
-    <section id="skills" className="section-padding">
-      <div className="container">
-        <div className="section-title">
-          <h2>My Skills</h2>
+    <section id="skills" className="skills-section">
+      <div className="skills-container">
+        <div className="skills-header">
+          <span className="exp-v2-eyebrow">
+                        <span className="dot" />
+                        02 — skills
+                    </span>
+          <h2 className="skills-title">My Skills</h2>
+          <p className="skills-subtitle">Technologies I work with</p>
         </div>
 
-        <div className="skills-container">
+        <div className="skills-orbit-wrapper">
           <div className="skills-orbit-container" ref={containerRef}>
             <div className="skills-orbit">
               {skillsData.map((skill, index) => (

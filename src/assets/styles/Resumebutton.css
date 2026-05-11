@@ -1,0 +1,221 @@
+/* =========================================
+   RESUME BUTTON — 3D Document Dark Theme
+   ========================================= */
+
+/* ── Floating anchor ──────────────────────── */
+.resume-float {
+  position: fixed;
+  top: 80px;
+  right: 28px;
+  z-index: 9999;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+
+  /* subtle ambient pulse */
+  animation: resumeFloat 4s ease-in-out infinite;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.resume-float:hover {
+  transform: translateY(-6px) scale(1.08);
+  animation-play-state: paused;
+}
+
+.resume-float.clicked {
+  transform: scale(0.9);
+  transition: transform 0.12s ease;
+}
+
+/* float animation */
+@keyframes resumeFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-5px); }
+}
+
+/* ── Glow ring ────────────────────────────── */
+.glow-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid rgba(110, 68, 255, 0.35);
+  animation: ringPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ringPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(110, 68, 255, 0.4);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.06);
+    box-shadow: 0 0 18px 4px rgba(110, 68, 255, 0.25);
+  }
+}
+
+/* ── 3-D Document ─────────────────────────── */
+.doc-wrap {
+  position: relative;
+  width: 36px;
+  height: 46px;
+  transform-style: preserve-3d;
+  transform: rotateX(18deg) rotateY(-22deg);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,0.55));
+}
+
+.resume-float:hover .doc-wrap {
+  transform: rotateX(8deg) rotateY(-10deg) scale(1.1);
+}
+
+/* Front face */
+.doc-body {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #0f111b 0%, #12151f 100%);
+  border-radius: 3px 8px 3px 3px;
+  border: 2px solid rgba(110, 68, 255, 0.45);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px 7px 8px;
+  overflow: hidden;
+}
+
+/* Shimmer sweep */
+.doc-body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(126, 82, 255, 0.12) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Folded corner */
+.doc-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(225deg, #0d1019 50%, rgba(110,68,255,0.3) 50%);
+  border-bottom-left-radius: 3px;
+  border-top-right-radius: 8px;
+}
+
+/* Text lines on the document */
+.doc-line {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(110,68,255,0.7), rgba(255,77,141,0.5));
+  width: 100%;
+  transition: opacity 0.3s;
+}
+
+.doc-line.short {
+  width: 65%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.resume-float:hover .doc-line {
+  background: linear-gradient(90deg, rgba(126,82,255,0.9), rgba(255,77,141,0.8));
+}
+
+/* Right side depth */
+.doc-side {
+  position: absolute;
+  top: 2px;
+  right: -5px;
+  width: 5px;
+  height: calc(100% - 4px);
+  background: linear-gradient(to bottom, #0b0d14, #0a0c13);
+  border-radius: 0 2px 2px 0;
+  border-top: 1px solid rgba(110,68,255,0.25);
+  border-right: 1px solid rgba(110,68,255,0.15);
+  border-bottom: 1px solid rgba(110,68,255,0.1);
+  transform: skewY(-1deg);
+}
+
+/* Bottom depth */
+.doc-bottom {
+  position: absolute;
+  bottom: -5px;
+  left: 2px;
+  width: calc(100% - 2px);
+  height: 5px;
+  background: linear-gradient(to right, #0b0d14, #090b11);
+  border-radius: 0 0 3px 3px;
+  border-bottom: 2px solid rgba(110,68,255,0.15);
+  border-left: 2px solid rgba(110,68,255,0.1);
+  transform: skewX(-1deg);
+}
+
+/* ── Tooltip ──────────────────────────────── */
+.resume-tooltip {
+  position: absolute;
+  bottom: -38px;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #0d1117;
+  border: 1px solid rgba(110,68,255,0.3);
+  color: rgba(232,234,240,0.85);
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 5px 12px;
+  border-radius: 100px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+}
+
+.resume-float:hover .resume-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Responsive ───────────────────────────── */
+@media (max-width: 576px) {
+  .resume-float {
+    top: 18px;
+    right: 18px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .doc-wrap {
+    width: 30px;
+    height: 38px;
+  }
+
+  .doc-corner {
+    width: 10px;
+    height: 10px;
+  }
+}

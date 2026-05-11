@@ -1,10 +1,8 @@
 import React from 'react';
 
-const ProjectCard = ({ project, style }) => {
-  
-
+const ProjectCard = ({ project, style, isActive }) => {
   return (
-    <div className="project-card" style={style}>
+    <div className={`project-card ${isActive ? 'active' : ''}`} style={style}>
       <div className="project-image">
         <img src={project.img} alt={project.title} />
         <div className="project-overlay">
@@ -20,25 +18,22 @@ const ProjectCard = ({ project, style }) => {
         <p>{project.description}</p>
         
         <div className="project-actions">
-            {/* The Live Demo Button (Primary) */}
-            <a 
-                href={project.liveLink} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="project-btn primary"
-            >
-                Live Demo
-            </a>
-            
-            {/* The Details/GitHub Button (Secondary) */}
-            <a 
-                href={project.detailsLink} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="project-btn secondary"
-            >
-                Details
-            </a>
+          <a 
+            href={project.liveLink} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="project-btn primary"
+          >
+            Live Demo
+          </a>
+          <a 
+            href={project.detailsLink} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="project-btn secondary"
+          >
+            Details
+          </a>
         </div>
       </div>
     </div>

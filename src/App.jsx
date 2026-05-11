@@ -1,5 +1,14 @@
 import React, { useEffect } from 'react';
-import './App.css'; 
+ 
+import './assets/styles/Hero.css';
+import './assets/styles/About.css';
+import './assets/styles/Skills.css';
+import './assets/styles/Projects.css';
+import './assets/styles/Experience.css';
+import './assets/styles/Navbar.css';
+import './assets/styles/Contact.css';
+import './assets/styles/Footer.css';
+import './assets/styles/ResumeButton.css';
 
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';

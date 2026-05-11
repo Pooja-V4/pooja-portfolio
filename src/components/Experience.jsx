@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+import '../assets/styles/Experience.css';
 
 const timelineData = [
     {
         id: 1,
-        icon: 'fas fa-code',
         date: 'Oct 2024',
         title: 'Full-Stack Development Intern',
         company: 'Infomatronics',
@@ -18,7 +18,6 @@ const timelineData = [
     },
     {
         id: 2,
-        icon: 'fas fa-robot',
         date: 'May 2025',
         title: 'Android App Development Intern',
         company: 'Internshala',
@@ -33,121 +32,126 @@ const timelineData = [
     },
     {
         id: 3,
-        icon: 'fas fa-universal-access',
         date: 'March 2025',
         title: 'Prompt Intern',
         company: 'Metawyse Solutions',
         description: 'Explored creative AI applications and interactive web development by building engaging projects such as a shooting game, dynamic websites, and AI-generated poster designs.',
-        tech: ['chatgpt','gemini'],
+        tech: ['ChatGPT', 'Gemini'],
         achievements: [
             'Developed an interactive shooting game using HTML, CSS, and JavaScript',
-            'Created “Wonder”-style responsive websites with smooth animations and UI effects',
+            'Created "Wonder"-style responsive websites with smooth animations and UI effects',
             'Designed multiple posters and visual assets using AI-powered design tools'
         ],
-        duration: '1 months'
+        duration: '1 month'
     }
 ];
 
 const Experience = () => {
     const [activeIndex, setActiveIndex] = useState(0);
-    const [animatedItems, setAnimatedItems] = useState([]);
-    const accordionRef = useRef(null);
+    const sectionRef = useRef(null);
 
     useEffect(() => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = entry.target.dataset.id;
-                    setAnimatedItems(prev => [...new Set([...prev, id])]);
-                }
-            });
-        }, { threshold: 0.2 });
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            },
+            { threshold: 0.15 }
+        );
 
-        const items = document.querySelectorAll('.accordion-item');
-        items.forEach(item => observer.observe(item));
-
-        return () => items.forEach(item => observer.unobserve(item));
+        const els = sectionRef.current?.querySelectorAll('[data-reveal]') || [];
+        els.forEach((el) => observer.observe(el));
+        return () => els.forEach((el) => observer.unobserve(el));
     }, []);
 
-    const toggleAccordion = (index) => {
-        setActiveIndex(activeIndex === index ? -1 : index);
-    };
-
     return (
-        <section id="experience" className="experience-accordion-section">
-            <div className="container">
-                <div className="section-title text-center mb-5">
-                    <h2 className="accordion-title">Professional Experience</h2>
-                    <p className="accordion-subtitle">
-                        Click on each role to view my internship experience
-                    </p>
-                </div>
+        <section id="experience" className="exp-v2" ref={sectionRef}>
+            <div className="exp-v2-bg">
+                <div className="exp-v2-grid" />
+                <div className="exp-v2-glow" />
+            </div>
 
-                <div className="accordion-container" ref={accordionRef}>
-                    {timelineData.map((item, index) => (
-                        <div 
-                            key={item.id}
-                            data-id={item.id}
-                            className={`accordion-item ${animatedItems.includes(item.id.toString()) ? 'animated' : ''} ${activeIndex === index ? 'active' : ''}`}
-                            style={{ '--item-index': index }}
-                        >
-                            <div 
-                                className="accordion-header"
-                                onClick={() => toggleAccordion(index)}
+            <div className="exp-v2-container">
+                <header className="exp-v2-header" data-reveal>
+                    <span className="exp-v2-eyebrow">
+                        <span className="dot" />
+                        04 — Experience
+                    </span>
+                    <h2 className="exp-v2-title">
+                        Where I&apos;ve <span className="accent">Intern</span>
+                    </h2>
+                    <p className="exp-v2-lead">
+                        A timeline of internships and roles that shaped how I build.
+                    </p>
+                </header>
+
+                <div className="exp-v2-layout" data-reveal>
+                    <div className="exp-v2-tabs" role="tablist">
+                        {timelineData.map((item, index) => (
+                            <button
+                                key={item.id}
+                                role="tab"
+                                aria-selected={activeIndex === index}
+                                className={`exp-v2-tab ${activeIndex === index ? 'is-active' : ''}`}
+                                onClick={() => setActiveIndex(index)}
                             >
-                                <div className="header-content">
-                                    <div className="icon-wrapper">
-                                        <i className={item.icon}></i>
-                                    </div>
-                                    <div className="title-section">
-                                        <h3 className="job-title">{item.title}</h3>
-                                        <div className="company-details">
-                                            <span className="company-name">{item.company}</span>
-                                            <span className="duration-badge">{item.duration}</span>
-                                        </div>
-                                        <span className="date-range">{item.date}</span>
-                                    </div>
-                                </div>
-                                <div className="accordion-indicator">
-                                    <i className={`fas fa-chevron-${activeIndex === index ? 'up' : 'down'}`}></i>
+                                <span className="tab-index">0{index + 1}</span>
+                                <span className="tab-company">{item.company}</span>
+                                <span className="tab-date">{item.date}</span>
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="exp-v2-panel">
+                        <div className="panel-head">
+                            <div>
+                                <h3 className="panel-role">
+                                    {timelineData[activeIndex].title}
+                                    <span className="panel-at"> @ {timelineData[activeIndex].company}</span>
+                                </h3>
+                                <div className="panel-meta">
+                                    <span className="meta-chip">
+                                        <span className="chip-dot" />
+                                        {timelineData[activeIndex].date}
+                                    </span>
+                                    <span className="meta-chip muted">
+                                        {timelineData[activeIndex].duration}
+                                    </span>
                                 </div>
                             </div>
-
-                            <div className="accordion-content">
-                                <div className="content-grid">
-                                    <div className="main-description">
-                                        <h4>Role Overview</h4>
-                                        <p>{item.description}</p>
-                                    </div>
-
-                                    <div className="achievements-section">
-                                        <h4>Key Achievements</h4>
-                                        <div className="achievements-list">
-                                            {item.achievements.map((achievement, achievementIndex) => (
-                                                <div key={achievementIndex} className="achievement-item">
-                                                    <div className="achievement-icon">
-                                                        <i className="fas fa-trophy"></i>
-                                                    </div>
-                                                    <span>{achievement}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className="tech-stack-section">
-                                        <h4>Technologies & Tools</h4>
-                                        <div className="tech-tags">
-                                            {item.tech.map((tech, techIndex) => (
-                                                <span key={techIndex} className="tech-tag">
-                                                    {tech}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="panel-counter">
+                                <span className="cnt-cur">0{activeIndex + 1}</span>
+                                <span className="cnt-sep">/</span>
+                                <span className="cnt-total">0{timelineData.length}</span>
                             </div>
                         </div>
-                    ))}
+
+                        <p className="panel-desc">{timelineData[activeIndex].description}</p>
+
+                        <div className="panel-section">
+                            <h4 className="panel-h4">// what I shipped</h4>
+                            <ul className="panel-list">
+                                {timelineData[activeIndex].achievements.map((a, i) => (
+                                    <li key={i}>
+                                        <span className="li-arrow">→</span>
+                                        <span>{a}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div className="panel-section">
+                            <h4 className="panel-h4">// stack</h4>
+                            <div className="panel-tags">
+                                {timelineData[activeIndex].tech.map((t, i) => (
+                                    <span key={i} className="panel-tag">{t}</span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

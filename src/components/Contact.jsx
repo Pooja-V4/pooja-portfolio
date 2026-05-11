@@ -1,200 +1,274 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import '../assets/styles/Contact.css';
 
 const FORMSPREE_URL = import.meta.env.VITE_FORMSPREE_URL;
 
 const Contact = () => {
-    
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         subject: '',
         message: ''
     });
-    const [status, setStatus] = useState(null); 
-
+    const [status, setStatus] = useState(null);
+    const [focusedField, setFocusedField] = useState(null);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // --- Logic for contact option buttons (now updates state) ---
     const handleContactOptionClick = (e) => {
-        // 1. Get the subject title from the clicked option
         const optionTitle = e.currentTarget.closest('.contact-option').querySelector('h3').textContent;
-        
-        // 2. Update the subject state immediately
         setFormData(prev => ({ ...prev, subject: `Regarding: ${optionTitle}` }));
-
-        // 3. Scroll to the form
         const contactForm = document.querySelector('.contact-form-wrapper');
         if (contactForm) {
             contactForm.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
-    // --- Form Submission Logic (using axios) ---
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        
-        // Validation check (basic, browser handles most of this)
         if (!formData.name || !formData.email || !formData.subject || !formData.message) {
             setStatus('Please fill in all required fields.');
             return;
         }
-
         setStatus('sending');
-
         try {
-            // Send the form data to Formspree
             const response = await axios.post(FORMSPREE_URL, formData);
-            
             if (response.status === 200) {
                 setStatus('success');
-                // Clear the form fields upon success
                 setFormData({ name: '', email: '', subject: '', message: '' });
             } else {
                 setStatus('error');
             }
-
         } catch (error) {
             console.error('Form Submission Error:', error);
             setStatus('error');
         }
     };
-    
-    // Helper function to render status messages
+
     const renderStatusMessage = () => {
         if (status === 'success') {
-            return <p className="mt-4 text-center" style={{ color: 'var(--neon-green)', fontWeight: 600 }}>Message sent successfully! I'll be in touch soon. ✨</p>;
+            return (
+                <div className="status-toast success">
+                    <span className="toast-icon">✦</span>
+                    <span>Message received — I'll be in touch soon.</span>
+                </div>
+            );
         }
         if (status === 'error') {
-            return <p className="mt-4 text-center" style={{ color: 'var(--neon-pink)', fontWeight: 600 }}>Failed to send message. Please check your network or try emailing directly.</p>;
+            return (
+                <div className="status-toast error">
+                    <span className="toast-icon">✕</span>
+                    <span>Something went wrong. Try emailing directly.</span>
+                </div>
+            );
         }
         return null;
     };
 
+    const contactOptions = [
+        {
+            icon: 'fas fa-briefcase',
+            title: 'Hire Me',
+            desc: 'Looking for a developer? Let\'s talk about how I can help your team.',
+            label: 'Discuss Opportunity',
+            delay: '0s'
+        },
+        {
+            icon: 'fas fa-rocket',
+            title: 'Startup Collaboration',
+            desc: 'Got a startup idea? I\'d love to help you build something great.',
+            label: 'Start Conversation',
+            delay: '0.1s'
+        },
+        {
+            icon: 'fas fa-users',
+            title: 'Project Partnership',
+            desc: 'Have something creative in mind? Let\'s bring it to life together.',
+            label: 'Let\'s Team Up',
+            delay: '0.2s'
+        }
+    ];
 
     return (
-        <section id="contact" className="section-padding contact-section">
-            <div className="container">
-                <div className="section-title">
-                    <h2>Let's Create Something Amazing Together</h2>
+        <section id="contact" className="contact-section">
+            {/* Background grid */}
+            <div className="bg-grid" aria-hidden="true" />
+            <div className="bg-glow glow-left" aria-hidden="true" />
+            <div className="bg-glow glow-right" aria-hidden="true" />
+
+            <div className="contact-container">
+
+                {/* Header */}
+                <div className="contact-header">
+                    <span className="exp-v2-eyebrow">
+                        <span className="dot" />
+                        05 — Contact Me
+                    </span>
+                    <h2 className="contact-heading">
+                        Let's Build<br />
+                        <span className="heading-accent">Something Together</span>
+                    </h2>
+                    <p className="contact-subtitle">
+                        Open for collaborations, ideas, and opportunities
+                    </p>
                 </div>
-                
-                <p className="section-subtitle text-center mb-5">I'm always excited to collaborate on innovative projects and bring ideas to life</p>
-                
-                {/* Contact Options */}
-                <div className="contact-options">
-                    <div className="contact-option animate__animated animate__fadeInUp" style={{ animationDelay: '0.2s' }}>
-                        <div className="contact-icon"><i className="fas fa-briefcase"></i></div>
-                        <h3>Hire Me</h3>
-                        <p>Looking for a developer? Let’s talk about how I can help your team grow.</p>
-                        <button className="contact-btn" onClick={handleContactOptionClick}>
-                            <span>Discuss Opportunity</span>
-                            <i className="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                                    
-                    <div className="contact-option animate__animated animate__fadeInUp" style={{ animationDelay: '0.4s' }}>
-                        <div className="contact-icon"><i className="fas fa-rocket"></i></div>
-                        <h3>Startup Collaboration</h3>
-                        <p>Got a startup idea? I’d love to help you build it.</p>
-                        <button className="contact-btn" onClick={handleContactOptionClick}>
-                            <span>Start Conversation</span>
-                            <i className="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                                    
-                    <div className="contact-option animate__animated animate__fadeInUp" style={{ animationDelay: '0.6s' }}>
-                        <div className="contact-icon"><i className="fas fa-users"></i></div>
-                        <h3>Project Partnership</h3>
-                        <p>Have something creative in mind? Let’s build it.</p>
-                        <button className="contact-btn" onClick={handleContactOptionClick}>
-                            <span>Let's Team Up</span>
-                            <i className="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                {/* Contact Form */}
-                <div className="row justify-content-center">
-                    <div className="col-lg-10">
-                        <div className="contact-form-wrapper animate__animated animate__fadeInUp" style={{ animationDelay: '0.8s' }}>
-                            <div className="form-header">
-                                <h3>Send Me a Message</h3>
-                                <p>Tell me about your project or idea, and I'll get back to you as soon as possible</p>
+
+                {/* Contact Option Cards */}
+                <div className="options-grid">
+                    {contactOptions.map((opt, i) => (
+                        <div
+                            className="contact-option"
+                            key={i}
+                            style={{ animationDelay: opt.delay }}
+                        >
+                            <div className="option-number">0{i + 1}</div>
+                            <div className="option-icon-wrap">
+                                <i className={opt.icon}></i>
                             </div>
-                                        
-                            <form onSubmit={handleFormSubmit}>
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label className="form-label">Your Name</label>
-                                            <input type="text" className="form-control" placeholder="Enter your full name" 
-                                                name="name" 
-                                                value={formData.name} 
-                                                onChange={handleChange} required 
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <div className="form-group">
-                                            <label className="form-label">Your Email</label>
-                                            <input type="email" className="form-control" placeholder="Enter your email address" 
-                                                name="email" 
-                                                value={formData.email} 
-                                                onChange={handleChange} required 
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                                
-                                <div className="form-group">
-                                    <label className="form-label">Subject</label>
-                                    <input type="text" className="form-control" placeholder="What is this regarding?" 
-                                        name="subject" 
-                                        value={formData.subject} 
-                                        onChange={handleChange} required 
-                                    />
-                                </div>
-                                                
-                                <div className="form-group">
-                                    <label className="form-label">Your Message</label>
-                                    <textarea className="form-control" rows="5" placeholder="Tell me about your project, idea, or opportunity..." 
-                                        name="message" 
-                                        value={formData.message} 
-                                        onChange={handleChange} required
-                                    ></textarea>
-                                </div>
-                                                
-                                <button type="submit" className="submit-btn" disabled={status === 'sending'}>
-                                    <i className="fas fa-paper-plane me-2"></i>
-                                    {status === 'sending' ? 'Sending...' : 'Send Message'}
-                                </button>
-                                
-                                {renderStatusMessage()}
-                            </form>
+                            <h3>{opt.title}</h3>
+                            <p>{opt.desc}</p>
+                            <button className="option-btn" onClick={handleContactOptionClick}>
+                                <span>{opt.label}</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Divider */}
+                <div className="section-divider">
+                    <span className="divider-line" />
+                    <span className="divider-text">or send a message directly</span>
+                    <span className="divider-line" />
+                </div>
+
+                {/* Contact Form */}
+                <div className="contact-form-wrapper">
+                    <div className="form-glow" aria-hidden="true" />
+
+                    <div className="form-header">
+                        <h3>Send a Message</h3>
+                        <p>I'll get back to you within 24 hours</p>
+                    </div>
+
+                    <form onSubmit={handleFormSubmit} className="contact-form">
+                        <div className="form-row">
+                            <div className={`field-group ${focusedField === 'name' ? 'focused' : ''} ${formData.name ? 'filled' : ''}`}>
+                                <label htmlFor="name">Your Name</label>
+                                <input
+                                    id="name"
+                                    type="text"
+                                    name="name"
+                                    placeholder="e.g. Pooja Velm"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    onFocus={() => setFocusedField('name')}
+                                    onBlur={() => setFocusedField(null)}
+                                    required
+                                />
+                                <span className="field-line" />
+                            </div>
+
+                            <div className={`field-group ${focusedField === 'email' ? 'focused' : ''} ${formData.email ? 'filled' : ''}`}>
+                                <label htmlFor="email">Email Address</label>
+                                <input
+                                    id="email"
+                                    type="email"
+                                    name="email"
+                                    placeholder="you@example.com"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    onFocus={() => setFocusedField('email')}
+                                    onBlur={() => setFocusedField(null)}
+                                    required
+                                />
+                                <span className="field-line" />
+                            </div>
+                        </div>
+
+                        <div className={`field-group ${focusedField === 'subject' ? 'focused' : ''} ${formData.subject ? 'filled' : ''}`}>
+                            <label htmlFor="subject">Subject</label>
+                            <input
+                                id="subject"
+                                type="text"
+                                name="subject"
+                                placeholder="What is this regarding?"
+                                value={formData.subject}
+                                onChange={handleChange}
+                                onFocus={() => setFocusedField('subject')}
+                                onBlur={() => setFocusedField(null)}
+                                required
+                            />
+                            <span className="field-line" />
+                        </div>
+
+                        <div className={`field-group ${focusedField === 'message' ? 'focused' : ''} ${formData.message ? 'filled' : ''}`}>
+                            <label htmlFor="message">Message</label>
+                            <textarea
+                                id="message"
+                                name="message"
+                                rows="5"
+                                placeholder="Tell me about your project or idea..."
+                                value={formData.message}
+                                onChange={handleChange}
+                                onFocus={() => setFocusedField('message')}
+                                onBlur={() => setFocusedField(null)}
+                                required
+                            />
+                            <span className="field-line" />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className={`submit-btn ${status === 'sending' ? 'is-sending' : ''}`}
+                            disabled={status === 'sending'}
+                        >
+                            <span className="btn-text">
+                                {status === 'sending' ? 'Sending...' : 'Send Message'}
+                            </span>
+                            <span className="btn-icon">
+                                {status === 'sending'
+                                    ? <span className="spinner" />
+                                    : <i className="fas fa-paper-plane" />
+                                }
+                            </span>
+                            <span className="btn-shine" aria-hidden="true" />
+                        </button>
+
+                        {renderStatusMessage()}
+                    </form>
+                </div>
+
+                {/* Info Cards */}
+                <div className="info-strip">
+                    <div className="info-card">
+                        <div className="info-icon">
+                            <i className="fas fa-envelope" />
+                        </div>
+                        <div className="info-content">
+                            <span className="info-label">Email</span>
+                            <span className="info-value">poojavelm@gmail.com</span>
+                        </div>
+                    </div>
+
+                    <div className="info-divider" />
+
+                    <div className="info-card">
+                        <div className="info-icon">
+                            <i className="fas fa-map-marker-alt" />
+                        </div>
+                        <div className="info-content">
+                            <span className="info-label">Based in</span>
+                            <span className="info-value">Chennai, Tamil Nadu</span>
                         </div>
                     </div>
                 </div>
-                
-                {/* Contact Information */}
-                <div className="contact-info">
-                    <div className="info-card animate__animated animate__fadeInUp" style={{ animationDelay: '1s' }}>
-                        <div className="info-icon"><i className="fas fa-envelope"></i></div>
-                        <h4>Email Me</h4>
-                        <p>poojavelm@example.com</p>
-                    </div>
-                                    
-                                    
-                    <div className="info-card animate__animated animate__fadeInUp" style={{ animationDelay: '1.2s' }}>
-                        <div className="info-icon"><i className="fas fa-map-marker-alt"></i></div>
-                        <h4>Location</h4>
-                        <p>TamilNadu, Chennai.</p>
-                    </div>
-                </div>
+
             </div>
         </section>
     );
